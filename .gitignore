@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+venv/
+env/
+.venv/
+.env
+
+# Jupyter
+.ipynb_checkpoints
+notebooks/.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Streamlit
+.streamlit/
+
+
+# MacOS
+.DS_Store
