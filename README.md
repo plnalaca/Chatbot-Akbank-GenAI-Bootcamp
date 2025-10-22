@@ -2,18 +2,9 @@
 
 Akbank Generative AI Bootcamp kapsamında geliştirilen RAG (Retrieval Augmented Generation) tabanlı bir soru-cevap sistemi.
 
-![Demo](screenshots/demo.png)
-
 ## Genel Bakış
 
 Bu proje, saç ekimi konusunda bilgi arayan kullanıcılara yardımcı olmak amacıyla geliştirilmiştir. Sistem, vektör tabanlı arama ve büyük dil modelleri kullanarak kullanıcı sorularına doğru ve bağlama uygun yanıtlar üretir.
-
-## Ekran Görüntüleri
-
-<div align="center">
-  <img src="screenshots/chat-interface.png" alt="Ana Arayüz" width="45%">
-  <img src="screenshots/sidebar.png" alt="Örnek Sorular" width="45%">
-</div>
 
 ## Proje Yapısı
 
