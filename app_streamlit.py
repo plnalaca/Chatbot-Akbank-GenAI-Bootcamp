@@ -8,8 +8,8 @@ from src.rag import retrieve_and_answer
 
 # Page config
 st.set_page_config(
-    page_title="Saç Ekimi Chatbot",
-    page_icon="💇",
+    page_title="Saç Ekimi Soru-Cevap",
+    page_icon="🏥",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -18,65 +18,52 @@ st.set_page_config(
 st.markdown("""
 <style>
     .main-header {
-        font-size: 2.5rem;
-        font-weight: bold;
-        color: #1f77b4;
-        text-align: center;
-        margin-bottom: 1rem;
+        font-size: 2rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
     }
     .sub-header {
-        font-size: 1.2rem;
-        color: #666;
-        text-align: center;
+        font-size: 1rem;
+        color: #7f8c8d;
         margin-bottom: 2rem;
-    }
-    .stChatMessage {
-        padding: 1rem;
-        border-radius: 0.5rem;
-        margin-bottom: 1rem;
-    }
-    .user-message {
-        background-color: #e3f2fd;
-    }
-    .assistant-message {
-        background-color: #f5f5f5;
     }
 </style>
 """, unsafe_allow_html=True)
 
 # Header
-st.markdown('<p class="main-header">💇 Saç Ekimi Asistanı</p>', unsafe_allow_html=True)
-st.markdown('<p class="sub-header">Saç ekimi hakkındaki sorularınızı sorun!</p>', unsafe_allow_html=True)
+st.markdown('<p class="main-header">Saç Ekimi Bilgi Sistemi</p>', unsafe_allow_html=True)
+st.markdown('<p class="sub-header">Saç ekimi ile ilgili merak ettiklerinizi sorabilirsiniz</p>', unsafe_allow_html=True)
 
 # Sidebar
 with st.sidebar:
-    st.header("ℹ️ Hakkında")
+    st.header("Bilgi")
     st.write("""
-    Bu chatbot, **RAG (Retrieval Augmented Generation)** teknolojisi ile çalışır:
+    Bu sistem RAG (Retrieval Augmented Generation) teknolojisi kullanarak 
+    saç ekimi hakkındaki sorularınıza yanıt verir.
     
-    **Teknoloji:**
-    - 🧠 Gemini 2.5-flash
-    - 🔍 Gemini Embedding API
-    - 📚 ChromaDB (86 doküman)
-    - ⚡ FastAPI Backend
+    **Teknik Detaylar:**
+    - Gemini AI dil modeli
+    - Vektör tabanlı arama
+    - 86 doküman veri seti
     
-    **Kapsam:**
-    - FUE/DHI yöntemleri
+    **Kapsadığı Konular:**
+    - FUE ve DHI yöntemleri
     - Operasyon süreci
-    - Bakım ve iyileşme
-    - Yan etkiler & riskler
-    - Fiyat bilgileri
+    - İyileşme süreci
+    - Olası yan etkiler
+    - Genel bilgiler
     """)
     
     st.divider()
     
-    st.header("🎯 Örnek Sorular")
+    st.header("Örnek Sorular")
     example_questions = [
         "Saç ekimi nedir?",
         "FUE yöntemi nasıl uygulanır?",
-        "Saç ekiminden sonra ne kadar süre dinlenmeliyim?",
-        "Şok dökülme nedir?",
-        "Saç ekimi fiyatlarını ne etkiler?",
+        "Ameliyat sonrası ne kadar dinlenmeliyim?",
+        "Şok dökülme ne demek?",
+        "Fiyatları etkileyen faktörler neler?",
         "Ekilen saçlar kalıcı mı?"
     ]
     
@@ -93,7 +80,7 @@ if "messages" not in st.session_state:
 
 # Check API key
 if not os.getenv("GEMINI_API_KEY"):
-    st.error("⚠️ GEMINI_API_KEY bulunamadı! Lütfen .env dosyasını kontrol edin.")
+    st.error("API anahtarı bulunamadı. Lütfen .env dosyasını kontrol edin.")
     st.stop()
 
 # Display chat history
@@ -113,18 +100,18 @@ if "current_question" in st.session_state:
     
     # Generate response
     with st.chat_message("assistant"):
-        with st.spinner("Düşünüyorum..."):
+        with st.spinner("Yanıt hazırlanıyor..."):
             try:
                 response = retrieve_and_answer(question)
                 st.markdown(response)
                 st.session_state.messages.append({"role": "assistant", "content": response})
             except Exception as e:
-                error_msg = f"❌ Bir hata oluştu: {str(e)}"
+                error_msg = f"Hata: {str(e)}"
                 st.error(error_msg)
                 st.session_state.messages.append({"role": "assistant", "content": error_msg})
 
 # Chat input
-if prompt := st.chat_input("Sorunuzu buraya yazın..."):
+if prompt := st.chat_input("Sorunuzu yazın..."):
     # Add user message to chat
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
@@ -132,18 +119,18 @@ if prompt := st.chat_input("Sorunuzu buraya yazın..."):
     
     # Generate response
     with st.chat_message("assistant"):
-        with st.spinner("Düşünüyorum..."):
+        with st.spinner("Yanıt hazırlanıyor..."):
             try:
                 response = retrieve_and_answer(prompt)
                 st.markdown(response)
                 st.session_state.messages.append({"role": "assistant", "content": response})
             except Exception as e:
-                error_msg = f"❌ Bir hata oluştu: {str(e)}"
+                error_msg = f"Hata: {str(e)}"
                 st.error(error_msg)
                 st.session_state.messages.append({"role": "assistant", "content": error_msg})
 
 # Clear chat button (in sidebar)
 with st.sidebar:
-    if st.button("🗑️ Sohbeti Temizle", use_container_width=True):
+    if st.button("Sohbeti Temizle", use_container_width=True):
         st.session_state.messages = []
         st.rerun()
