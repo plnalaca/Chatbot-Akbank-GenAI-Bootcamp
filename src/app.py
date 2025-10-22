@@ -4,17 +4,15 @@ from pydantic import BaseModel
 from src.rag import retrieve_and_answer, build_or_get_vectorstore
 import logging
 
-# Setup logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = FastAPI(
-    title="Saç Ekimi Chatbot API - LangChain Edition",
-    description="RAG-based chatbot for hair transplant Q&A using LangChain + Gemini API",
-    version="2.0.0"
+    title="Saç Ekimi Chatbot API",
+    description="RAG tabanlı saç ekimi soru-cevap sistemi",
+    version="1.0.0"
 )
 
-# Enable CORS for frontend integration
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -26,7 +24,6 @@ app.add_middleware(
 
 class Query(BaseModel):
     question: str
-
 
 class ChatResponse(BaseModel):
     question: str

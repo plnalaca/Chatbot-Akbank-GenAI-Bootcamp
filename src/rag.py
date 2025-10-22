@@ -1,18 +1,14 @@
-"""RAG pipeline for Saç Ekimi Chatbot with LangChain + Gemini API
+"""
+RAG Pipeline - Saç Ekimi Chatbot
 
-This module provides:
-- Document loading from data/sac_ekimi_veri_seti.py
-- LangChain-based RAG pipeline
-- Gemini embeddings via LangChain
-- Chroma vectorstore via LangChain
-- LCEL (LangChain Expression Language) chains
+LangChain framework kullanarak RAG implementasyonu.
+Gemini API ile embedding ve text generation.
 """
 from typing import List, Optional
 from haystack import Document as HaystackDocument
 import os
 from dotenv import load_dotenv
 
-# LangChain imports
 from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
 from langchain_chroma import Chroma
 from langchain_core.documents import Document as LCDocument
@@ -20,17 +16,16 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
 
-# Load environment variables
 load_dotenv()
 
-# Global caching
+# Cache
 _haystack_docs_cache: Optional[List[HaystackDocument]] = None
 _vectorstore_cache: Optional[Chroma] = None
 _rag_chain_cache = None
 
 
 def load_documents_from_data() -> List[HaystackDocument]:
-    """Import and return Haystack document list from the provided data module."""
+    """Veri setini yükle"""
     global _haystack_docs_cache
     if _haystack_docs_cache is not None:
         return _haystack_docs_cache
@@ -46,7 +41,7 @@ def load_documents_from_data() -> List[HaystackDocument]:
 
 
 def convert_to_langchain_documents(haystack_docs: List[HaystackDocument]) -> List[LCDocument]:
-    """Convert Haystack Documents to LangChain Documents."""
+    """Haystack dokümanlarını LangChain formatına çevir"""
     lc_documents = []
     for doc in haystack_docs:
         metadata = {
