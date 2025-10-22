@@ -1,25 +1,26 @@
-# Core dependencies
-fastapi==0.119.0
-uvicorn==0.38.0
-haystack-ai==2.18.1
-transformers==4.57.1
-sentence-transformers==5.1.1
-chromadb==1.2.0
-python-multipart==0.0.20
-requests==2.32.5
-google-generativeai==0.8.5
-python-dotenv==1.1.1
-
-# UI & Visualization
-streamlit==1.50.0
-jupyter==1.1.1
-pandas==2.3.3
-matplotlib==3.9.4
-seaborn==0.13.2
-
-# LangChain framework (required for RAG pipeline)
+# Core RAG dependencies
 langchain==0.3.27
 langchain-google-genai==2.1.12
 langchain-chroma==0.2.6
 langchain-core==0.3.79
 langchain-community==0.3.31
+
+# Vector database
+chromadb==0.4.24
+
+# Environment
+python-dotenv==1.0.0
+
+# UI
+streamlit==1.40.0
+
+# API (optional - for FastAPI backend)
+fastapi==0.115.0
+uvicorn==0.30.0
+python-multipart==0.0.20
+
+# Data processing (minimal set)
+pandas==2.2.0
+
+# Legacy dependencies (for Haystack dataset compatibility)
+haystack-ai==2.6.0
