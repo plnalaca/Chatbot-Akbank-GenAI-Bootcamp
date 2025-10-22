@@ -14,8 +14,8 @@ Bu proje, saç ekimi konusunda bilgi arayan kullanıcılara yardımcı olmak ama
 ### Sohbet Örneği
 <img src="screenshots/chat-example.png" alt="Sohbet Örneği" width="800">
 
-### Sidebar - Örnek Sorular
-<img src="screenshots/sidebar.png" alt="Örnek Sorular" width="400">
+### Yanıt Hazırlanıyor
+<img src="screenshots/chat-loading.png" alt="Yanıt Hazırlanıyor" width="800">
 
 ## Proje Yapısı
 
