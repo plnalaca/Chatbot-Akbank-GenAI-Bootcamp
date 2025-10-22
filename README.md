@@ -117,11 +117,11 @@ Tarayıcınızda otomatik olarak `http://localhost:8501` açılacaktır.
 
 ---
 
-## � Demo
+## 🌐 Demo
+
+**Online:** https://sac-ekimi-soru-cevap-chatbot.streamlit.app/
 
 **Lokal:** `http://localhost:8501`
-
-**Online:** *(Deploy tamamlandığında buraya eklenecek)*
 
 ---
 
