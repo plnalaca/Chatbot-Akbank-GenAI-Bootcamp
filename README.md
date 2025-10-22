@@ -6,6 +6,17 @@ Akbank Generative AI Bootcamp kapsamında geliştirilen RAG (Retrieval Augmented
 
 Bu proje, saç ekimi konusunda bilgi arayan kullanıcılara yardımcı olmak amacıyla geliştirilmiştir. Sistem, vektör tabanlı arama ve büyük dil modelleri kullanarak kullanıcı sorularına doğru ve bağlama uygun yanıtlar üretir.
 
+## Ekran Görüntüleri
+
+### Ana Arayüz
+<img src="screenshots/main-interface.png" alt="Ana Arayüz" width="800">
+
+### Sohbet Örneği
+<img src="screenshots/chat-example.png" alt="Sohbet Örneği" width="800">
+
+### Sidebar - Örnek Sorular
+<img src="screenshots/sidebar.png" alt="Örnek Sorular" width="400">
+
 ## Proje Yapısı
 
 ```
@@ -24,13 +35,27 @@ chat_bot/
 ## Teknik Detaylar
 
 ### Veri Seti
-Proje, çeşitli güvenilir kaynaklardan derlenen 86 adet soru-cevap çiftini içermektedir. Veri seti şu kategorileri kapsar:
+Veri seti, saç ekimi web sitelerinin "Sık Sorulan Sorular" bölümlerinden derlenmiştir. Toplamda 86 adet soru-cevap çiftinden oluşmaktadır. İçerik şu kategorileri kapsar:
 - Temel bilgiler ve tanımlar
 - FUE ve DHI yöntemleri
 - Operasyon süreci
 - Post-operatif bakım
 - Yan etkiler ve riskler
 - Fiyatlandırma
+
+### RAG Teknolojisi Nedir?
+RAG (Retrieval Augmented Generation), büyük dil modellerinin bilgi üretme yeteneklerini dış bilgi kaynaklarıyla birleştiren bir tekniktir. Bu projede RAG kullanılmasının nedenleri:
+
+- **Doğruluk:** Model, kendi eğitim verisi yerine güncel ve doğrulanmış bilgilerden yanıt üretir
+- **Kaynak Kontrolü:** Yanıtlar, veri setindeki spesifik dokümanlara dayanır
+- **Hallucination Önleme:** Model, bilmediği konularda uydurma yapmaz, sadece verilen bağlamdan yanıt verir
+
+### LangChain Framework
+LangChain, dil modelleri ile uygulama geliştirmek için kullanılan bir framework'tür. Bu projede tercih edilme sebepleri:
+
+- **Modülerlik:** Embedding, vector store ve LLM bileşenlerini kolayca entegre eder
+- **LCEL (LangChain Expression Language):** Chain'leri basit ve okunabilir şekilde tanımlamayı sağlar
+- **Ekosistem:** Chroma, Gemini gibi araçlarla hazır entegrasyonlar sunar
 
 ### Teknoloji Stack
 **RAG Pipeline:**
@@ -39,10 +64,6 @@ Proje, çeşitli güvenilir kaynaklardan derlenen 86 adet soru-cevap çiftini i�
 - Chroma vektör veritabanı
 - Gemini 2.5-flash dil modeli
 
-**Uygulama:**
-- Streamlit ile geliştirilmiş interaktif web arayüzü
-- FastAPI backend desteği (opsiyonel)
-
 ### Mimari
 
 Sistem, üç temel aşamadan oluşur:
@@ -50,6 +71,61 @@ Sistem, üç temel aşamadan oluşur:
 1. **Retrieval (Bilgi Getirme):** Kullanıcı sorusu vektör uzayında aranır ve en ilgili dokümanlar bulunur
 2. **Augmentation (Zenginleştirme):** Bulunan dokümanlar bağlam olarak dil modeline iletilir
 3. **Generation (Üretim):** Dil modeli, bağlamı kullanarak kullanıcı sorusuna uygun yanıt üretir
+
+#### Sistem Mimarisi
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│                        Kullanıcı                             │
+│                     (Web Tarayıcı)                           │
+└────────────────────────────┬─────────────────────────────────┘
+                             │
+                             ▼
+┌──────────────────────────────────────────────────────────────┐
+│                   Streamlit Arayüzü                          │
+│              (Web UI - app_streamlit.py)                     │
+└────────────────────────────┬─────────────────────────────────┘
+                             │
+                             ▼
+┌──────────────────────────────────────────────────────────────┐
+│                    RAG Pipeline (src/rag.py)                 │
+│                                                              │
+│  ┌────────────────────────────────────────────────────┐    │
+│  │  1. EMBEDDING                                      │    │
+│  │     Kullanıcı sorusu → Vektöre dönüştürme         │    │
+│  │     (Google Generative AI Embeddings)             │    │
+│  └───────────────────────┬────────────────────────────┘    │
+│                          │                                   │
+│                          ▼                                   │
+│  ┌────────────────────────────────────────────────────┐    │
+│  │  2. RETRIEVAL                                      │    │
+│  │     Vektör veritabanında benzer dokümanları ara    │    │
+│  │     (Chroma DB - 86 doküman)                       │    │
+│  └───────────────────────┬────────────────────────────┘    │
+│                          │                                   │
+│                          ▼                                   │
+│  ┌────────────────────────────────────────────────────┐    │
+│  │  3. AUGMENTATION                                   │    │
+│  │     Bulunan dokümanları bağlam olarak ekle         │    │
+│  │     (Context + Soru)                               │    │
+│  └───────────────────────┬────────────────────────────┘    │
+│                          │                                   │
+│                          ▼                                   │
+│  ┌────────────────────────────────────────────────────┐    │
+│  │  4. GENERATION                                     │    │
+│  │     Bağlam kullanarak yanıt üret                   │    │
+│  │     (Gemini 2.5-flash)                             │    │
+│  └───────────────────────┬────────────────────────────┘    │
+│                          │                                   │
+└──────────────────────────┼───────────────────────────────────┘
+                           │
+                           ▼
+                   ┌───────────────┐
+                   │  Türkçe Yanıt │
+                   └───────────────┘
+```
+
+#### LCEL Chain Yapısı
 
 ```python
 # LCEL chain yapısı
@@ -115,11 +191,3 @@ Uygulama `http://localhost:8501` adresinde çalışmaya başlayacaktır.
 **Canlı Demo:** https://sac-ekimi-soru-cevap-chatbot.streamlit.app/
 
 **Yerel:** http://localhost:8501
-
-## Lisans
-
-Bu proje Akbank GenAI Bootcamp eğitim programı kapsamında geliştirilmiştir.
-
-## İletişim
-
-Proje hakkında sorularınız için GitHub Issues bölümünü kullanabilirsiniz.
