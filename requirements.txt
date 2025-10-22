@@ -20,7 +20,7 @@ uvicorn==0.30.0
 python-multipart==0.0.20
 
 # Data processing (minimal set)
-pandas==2.2.0
+pandas>=2.0.0
 
 # Legacy dependencies (for Haystack dataset compatibility)
 haystack-ai==2.6.0
